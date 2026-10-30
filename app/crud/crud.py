@@ -1,12 +1,10 @@
 import uuid
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models.models import Item, User, Order
 from app.schemas.schemas import ProductCreate, UserCreate, OrderCreate, OrderUpdate
 
 def create_item(db:Session, item: ProductCreate):
-    # db_item = Item(**item.model_dump())# Вот тут разобраться я так понимаю мне тут нужно сделать проверку по значениям
     db_item = Item(
         name = item.name,
         price = item.price,
@@ -42,7 +40,7 @@ def create_order(db: Session, data: OrderCreate):
         item_id=data.item_id,
         count=data.count,
         total_price=data.total_price,
-        transactions=uuid.uuid4(),  # питоновский UUID, гарантированно не None
+        transactions=uuid.uuid4()
     )
     db.add(order)
     db.commit()
@@ -57,7 +55,6 @@ def update_order(db: Session, order_id: int, data: OrderUpdate):
     if not order:
         raise HTTPException(status_code=404, detail="Заказ не найден")
 
-    # Частичное обновление: меняем только переданные поля
     if data.user_id is not None:
         order.user_id = data.user_id
     if data.item_id is not None:

@@ -15,7 +15,6 @@ def get_next_id() -> int:
     print (current)
     return current
     
-
 @app.get("/")
 def get_items():
     return [
@@ -60,5 +59,3 @@ def delete_item (id:int):
         raise HTTPException(status_code=404, detail="Ошибка")
     del db[id]
     return "Удалили Данные"
-
-

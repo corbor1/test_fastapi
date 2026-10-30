@@ -20,14 +20,11 @@ class OrderCreate(BaseModel):
     count: int
     total_price: float
     
-
 class OrderUpdate(BaseModel):
     user_id: int
     item_id: int
     count: int
     total_price:float
-
-
 
 class OrderResponse(OrderUpdate):
     id: int
@@ -38,6 +35,3 @@ class OrderEditUpdate(BaseModel):
     item_id: Optional[int] = None
     count: Optional[int] = None
     total_price:Optional[float] = None
-
-
-
