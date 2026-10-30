@@ -6,7 +6,12 @@ from app.models.models import Item, User, Order
 from app.schemas.schemas import ProductCreate, UserCreate, OrderCreate, OrderUpdate
 
 def create_item(db:Session, item: ProductCreate):
-    db_item = Item(**item.model_dump())# Вот тут разобраться я так понимаю мне тут нужно сделать проверку по значениям
+    # db_item = Item(**item.model_dump())# Вот тут разобраться я так понимаю мне тут нужно сделать проверку по значениям
+    db_item = Item(
+        name = item.name,
+        price = item.price,
+        count = item.count,
+    )
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
