@@ -4,6 +4,9 @@ from sqlalchemy.orm import Session
 from app.models.models import Item, User, Order
 from app.schemas.schemas import ProductCreate, UserCreate, OrderCreate, OrderUpdate
 
+from app.db.db import engine
+from app.models.models import Base
+
 def create_item(db:Session, item: ProductCreate):
     db_item = Item(
         name = item.name,
@@ -67,3 +70,11 @@ def update_order(db: Session, order_id: int, data: OrderUpdate):
     db.commit()
     db.refresh(order)
     return order
+
+def drop_table():
+    Base.metadata.drop_all(engine)
+    return "Table is drop"
+
+def create_table():
+    Base.metadata.create_all(engine)
+    return "Table is create"

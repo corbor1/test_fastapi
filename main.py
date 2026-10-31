@@ -1,5 +1,5 @@
 #27.10.2026
-from app.crud.crud import (create_item, get_all_item, get_all_user, create_user,
+from app.crud.crud import (create_item, create_table, drop_table, get_all_item, get_all_user, create_user,
     get_item_id, get_user_id, create_order, get_orders, update_order)
 from sqlalchemy.orm import Session
 from app.db.db import get_db
@@ -79,3 +79,11 @@ def delete_user(order_id: int, db: Session = Depends(get_db)):
 
     db.delete(order)
     db.commit()
+
+@app.post ("/drop_table")
+def dr_table ():
+    return drop_table()
+
+@app.post ("/Create_table")
+def cr_table ():
+    return create_table()
