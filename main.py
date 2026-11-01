@@ -1,4 +1,6 @@
 #27.10.2026
+import uvicorn
+
 from app.crud.crud import (create_item, create_table, drop_table, get_all_item, get_all_user, create_user,
     get_item_id, get_user_id, create_order, get_orders, update_order)
 from sqlalchemy.orm import Session
@@ -87,3 +89,6 @@ def dr_table ():
 @app.post ("/Create_table")
 def cr_table ():
     return create_table()
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
