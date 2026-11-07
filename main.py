@@ -16,13 +16,11 @@ app = FastAPI()
 
 @app.post("/Items",response_model=ProductResponse)
 def item_create (item:ProductCreate, db:Session = Depends(get_db)):
-    print (create_item(db, item))
-    producer.produce(
-    topic='demo',
-    # key=str(data['user_id']),  # Ключ сообщения влияет на партиционирование
-    value=json.dumps(create_item(db, item)).encode('utf-8'),  # Сериализуем и преобразуем в байты
-    )
-    return create_item(db, item)
+    db_item = create_item(db, item)
+    value = ProductResponse.model_validate(db_item, from_attributes=True).model_dump_json().encode('utf-8')
+    producer.produce(topic='items', value=value)
+    producer.poll(0)
+    return db_item
 
 @app.post("/Create_user",response_model=UserCreate)
 def item_create (user:UserCreate, db:Session = Depends(get_db)):
