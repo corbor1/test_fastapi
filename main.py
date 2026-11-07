@@ -1,4 +1,8 @@
 #27.10.2026
+import json
+
+import uvicorn
+
 from app.crud.crud import (create_item, create_table, drop_table, get_all_item, get_all_user, create_user,
     get_item_id, get_user_id, create_order, get_orders, update_order)
 from sqlalchemy.orm import Session
@@ -6,11 +10,18 @@ from app.db.db import get_db
 from app.schemas.schemas import OrderEditUpdate,ProductResponse, ProductCreate, UserCreate, OrderUpdate, OrderCreate, OrderResponse
 from fastapi import Depends, FastAPI, HTTPException
 from app.models.models import Order, User
+from app.kafka.confluent_kafka import producer
 
 app = FastAPI()
 
 @app.post("/Items",response_model=ProductResponse)
 def item_create (item:ProductCreate, db:Session = Depends(get_db)):
+    print (create_item(db, item))
+    producer.produce(
+    topic='demo',
+    # key=str(data['user_id']),  # Ключ сообщения влияет на партиционирование
+    value=json.dumps(create_item(db, item)).encode('utf-8'),  # Сериализуем и преобразуем в байты
+    )
     return create_item(db, item)
 
 @app.post("/Create_user",response_model=UserCreate)
